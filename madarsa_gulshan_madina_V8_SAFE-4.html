@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Madarsa Gulshan-e-Madina Panaravad</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f4;color:#123}
+header{background:linear-gradient(135deg,#075e3d,#c99a2e);color:#fff;padding:20px;text-align:center}
+.wrap{max-width:1100px;margin:auto;padding:14px}
+.card{background:#fff;border-radius:15px;padding:15px;margin:12px 0;box-shadow:0 3px 14px rgba(0,0,0,0.08)}
+input,select,button,textarea{width:100%;box-sizing:border-box;padding:11px;margin:6px 0;border:1px solid #ccc;border-radius:9px;font-size:15px}
+button{background:#075e3d;color:#fff;border:0;font-weight:bold;cursor:pointer}
+.gold{background:#b88620}
+.danger{background:#a51d2d}
+.blue{background:#1d6fa5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.hidden{display:none}
+.msg{padding:10px;border-radius:8px;background:#fff3cd;margin:8px 0}
+.studentPhoto{width:75px;height:75px;border-radius:50%;object-fit:cover;background:#ddd;border:2px solid #c99a2e}
+.molanaPhoto{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #b88620;background:#eee}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:9px;border-bottom:1px solid #ddd;text-align:left;font-size:14px}
+.badge{display:inline-block;padding:5px 10px;border-radius:15px;background:#e9f5ee;margin:3px;font-weight:bold;font-size:13px}
+.badge-gold{background:#fdf2d7;color:#855d05}
+.badge-blue{background:#e1f0fa;color:#0c5460}
+.molana-card{background:linear-gradient(135deg,#fbfdfc,#eff7f2);border:2px solid #075e3d;border-radius:15px;padding:15px;margin-bottom:15px;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.contact-chip{display:inline-block;background:#075e3d;color:#fff;padding:4px 10px;border-radius:20px;font-size:13px;text-decoration:none;margin-right:5px;margin-top:5px}
+.trustee-chip{display:inline-block;background:#b88620;color:#fff;padding:4px 10px;border-radius:20px;font-size:13px;text-decoration:none;margin-top:5px}
+.notice-box{border-left:5px solid #075e3d;background:#f9fdfa;padding:10px;margin:10px 0;border-radius:0 10px 10px 0}
+.reply-tag{background:#fff;border:1px dashed #075e3d;padding:5px 10px;border-radius:6px;margin-top:5px;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🕌 Madarsa Gulshan-e-Madina Panaravad</h1>
+  <div>Madarsa Management</div>
+</header>
+
+<div class="wrap">
+
+  <!-- Login Screen -->
+  <div id="login" class="card">
+    <h2>🔐 Login</h2>
+    <div class="grid">
+      <select id="role">
+        <option value="admin">Admin</option>
+        <option value="teacher">Teacher</option>
+        <option value="student">Student</option>
+      </select>
+      <input id="uid" placeholder="User ID / Student ID">
+      <input id="pin" type="password" placeholder="PIN">
+    </div>
+    <button onclick="loginNow()">Login</button>
+    <div id="loginMsg" class="msg">Admin: <b>admin / 7860</b> | Teacher: <b>teacher / 123456</b></div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="hidden">
+    
+    <!-- Top Welcome & Maulana Card -->
+    <div class="molana-card">
+      <img id="molanaPic" class="molanaPhoto" src="" alt="Molana Jafar Raza" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'90\' height=\'90\'><rect width=\'90\' height=\'90\' fill=\'%23ddd\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'12\' fill=\'%23555\'>Photo</text></svg>'">
+      <div style="flex:1">
+        <h3 style="margin:0 0 5px 0;color:#075e3d">Molana Jafar Raza</h3>
+        <div>📞 Mobile: <a class="contact-chip" href="tel:8140851723">8140851723</a></div>
+        <div>🤝 Trustee: <a class="trustee-chip" href="tel:9898935542">9898935542</a></div>
+        <div style="margin-top:8px" id="adminPhotoChange" class="hidden">
+          <label style="font-size:12px;cursor:pointer;color:#075e3d">📷 <b>अपनी प्रोफाइल फोटो बदलें</b></label>
+          <input type="file" id="molanaInput" accept="image/*" style="font-size:12px;padding:4px;width:auto">
+        </div>
+      </div>
+      <div>
+        <b id="welcome"></b><br>
+        <button class="danger" style="width:auto;padding:7px 15px;margin-top:5px" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="hidden">
+      <div class="card">
+        <h2>👨‍💼 Admin Dashboard</h2>
+        <div class="grid">
+          <button onclick="showAdd()">➕ Student Add</button>
+          <button onclick="showAttendance()">📅 Attendance & Sabak</button>
+          <button onclick="showStudents()">👥 Students & Edit</button>
+          <button onclick="showReports()">📊 Reports & Takawari</button>
+          <button onclick="showNotices()">📢 Notice Board</button>
+          <button onclick="showShare()">📱 WhatsApp Share</button>
+          <button class="gold" onclick="backup()">💾 Backup</button>
+          <button class="gold" onclick="document.getElementById('restore').click()">♻️ Restore</button>
+          <input id="restore" type="file" accept=".json" class="hidden" onchange="restore(event)">
+        </div>
+      </div>
+
+      <!-- Add Student Box -->
+      <div id="addBox" class="card hidden">
+        <h2>➕ Student Add</h2>
+        <input id="sname" placeholder="बच्चे का नाम">
+        <input id="sfather" placeholder="पिता का नाम">
+        <input id="sclass" placeholder="कक्षा">
+        <input id="smobile" placeholder="Mobile">
+        <input id="spin" placeholder="Student PIN (अलग PIN)">
+        <input id="sproof" placeholder="Madarsa Proof ID">
+        <label>📷 फोटो</label>
+        <input id="photo" type="file" accept="image/*" capture="environment">
+        <img id="preview" class="studentPhoto hidden">
+        <button onclick="addStudent()">Student Save</button>
+      </div>
+
+      <!-- Edit Student Box Modal/View -->
+      <div id="editBox" class="card hidden" style="border:2px solid #b88620">
+        <h2>✏️ Student Edit करें</h2>
+        <input type="hidden" id="editId">
+        <label>ID:</label> <b id="editIdDisplay"></b>
+        <input id="ename" placeholder="बच्चे का नाम">
+        <input id="efather" placeholder="पिता का नाम">
+        <input id="eclass" placeholder="कक्षा">
+        <input id="emobile" placeholder="Mobile">
+        <input id="epin" placeholder="PIN">
+        <input id="eproof" placeholder="Madarsa Proof ID">
+        <label>📷 नई फोटो चुनें (अगर बदलनी हो):</label>
+        <input id="ephoto" type="file" accept="image/*">
+        <div style="display:flex;gap:10px">
+          <button class="gold" onclick="saveEditedStudent()">Update Save</button>
+          <button class="danger" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Students List Box -->
+      <div id="studentsBox" class="card hidden">
+        <h2>👥 सभी विद्यार्थी (Edit & View)</h2>
+        <div id="studentsList"></div>
+      </div>
+
+      <!-- Attendance Box with Sabak (Yes/No) -->
+      <div id="attBox" class="card hidden">
+        <h2>📅 Attendance & Sabak System</h2>
+        <label>तारीख़ चुनें:</label>
+        <input id="attDate" type="date">
+        <div style="overflow-x:auto;">
+          <div id="attTable"></div>
+        </div>
+        <button onclick="saveAttendance()">Attendance & Sabak Save करें</button>
+      </div>
+
+      <!-- Reports Box with Takawari -->
+      <div id="reportBox" class="card hidden">
+        <h2>📊 Monthly / Yearly Report & Takawari (%)</h2>
+        <div id="reports"></div>
+      </div>
+
+      <!-- Notice Board Box (Admin View) -->
+      <div id="noticeBox" class="card hidden">
+        <h2>📢 Notice Board (सूचना भेजें)</h2>
+        <textarea id="noticeMsg" placeholder="सभी विद्यार्थियों के लिए सूचना लिखें..." rows="3"></textarea>
+        <button onclick="postNotice()">Notice जारी करें</button>
+        <h3>जारी किए गए Notices & बच्चों के जवाब:</h3>
+        <div id="noticesList"></div>
+      </div>
+
+      <!-- Share Box -->
+      <div id="shareBox" class="card hidden">
+        <h2>📱 WhatsApp Share</h2>
+        <p>नीचे HTTPS website link डालें। फिर WhatsApp से बच्चों को भेजें।</p>
+        <input id="siteUrl" placeholder="https://...">
+        <button onclick="shareGeneral()">WhatsApp पर App Link भेजें</button>
+        <div id="shareStudents"></div>
+      </div>
+    </div>
+
+    <!-- Teacher Panel -->
+    <div id="teacherPanel" class="hidden">
+      <div class="card">
+        <h2>👨‍🏫 Teacher Panel</h2>
+        <div class="grid">
+          <button onclick="teacherAttendance()">📅 आज की Attendance</button>
+          <button onclick="teacherNotices()">📢 Notices</button>
+          <button onclick="showReports()">📊 Reports</button>
+        </div>
+        <div id="teacherViewArea" style="margin-top:15px"></div>
+      </div>
+    </div>
+
+    <!-- Student Panel -->
+    <div id="studentPanel" class="hidden">
+      <div class="card">
+        <h2>👦 Student Panel</h2>
+        <div id="myData"></div>
+      </div>
+
+      <!-- Student Notice Board -->
+      <div class="card">
+        <h2>📢 Notice Board</h2>
+        <div id="studentNoticeView">कोई नया नोटिस नहीं है।</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const KEY='madarsa_gulshan_madina_v6';
+const DBNAME='MadarsaGulshanMadinaSafeV8';
+const defaults={students:[],attendance:{},fees:{},marks:{},homework:[],notices:[],adminPhoto:''};
+let D=JSON.parse(localStorage.getItem(KEY)||JSON.stringify(defaults)),current=null,ready=false;
+
+const $=id=>document.getElementById(id),clean=x=>String(x||'').trim();
+
+function idb(){
+  return new Promise((resolve,reject)=>{
+    const r=indexedDB.open(DBNAME,1);
+    r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('data'))r.result.createObjectStore('data')};
+    r.onsuccess=()=>resolve(r.result);
+    r.onerror=()=>reject(r.error);
+  });
+}
+
+async function loadSafe(){
+  try{
+    const db=await idb();
+    const d=await new Promise((res,rej)=>{
+      const q=db.transaction('data','readonly').objectStore('data').get('main');
+      q.onsuccess=()=>res(q.result);
+      q.onerror=()=>rej(q.error);
+    });
+    if(d&&d.students){
+      D={...defaults,...d};
+      if(!D.notices)D.notices=[];
+      return;
+    }
+    const old=localStorage.getItem(KEY);
+    if(old){
+      try{D=JSON.parse(old);if(!D.notices)D.notices=[];}catch(e){D=structuredClone(defaults)}
+    }
+    await save();
+  }catch(e){console.warn(e)}
+}
+
+async function save(){
+  try{
+    const db=await idb();
+    await new Promise((res,rej)=>{
+      const q=db.transaction('data','readwrite').objectStore('data').put(D,'main');
+      q.onsuccess=()=>res();
+      q.onerror=()=>rej(q.error);
+    });
+    try{localStorage.setItem('madarsa_gulshan_madina_safe_backup',JSON.stringify({...D,students:D.students.map(x=>({...x,photo:''}))}))}catch(e){}
+    return true;
+  }catch(e){alert('Data save nahi ho saka. Backup download karein.');return false}
+}
+
+async function initSafe(){
+  await loadSafe();
+  ready=true;
+  const m=$('loginMsg');
+  if(m)m.innerHTML='✅ Data सुरक्षित है। Login करें।';
+}
+initSafe();
+
+async function loginNow(){
+  if(!ready){$('loginMsg').innerHTML='⏳ Data load ho raha hai, 1 second ruk kar Login karein.';return}
+  await loadSafe();
+  let r=$('role').value,i=clean($('uid').value),p=clean($('pin').value),ok=false;
+  
+  if(r==='admin') ok=((i.toLowerCase()==='admin'&&p==='7860')||(i==='7860'&&p==='admin'));
+  if(r==='teacher') ok=((i.toLowerCase()==='teacher'&&p==='123456')||(i==='123456'&&p==='teacher')||(i==='123456'&&p==='123456'));
+  if(r==='student'){
+    ok=!!D.students.find(s=>
+      (s.id.toLowerCase()===i.toLowerCase()||(s.proof&&s.proof.toLowerCase()===i.toLowerCase())||s.name.toLowerCase()===i.toLowerCase()) &&
+      (s.pin===p || ('student '+s.pin).toLowerCase()===p.toLowerCase() || p.replace(/\D/g,'')===s.pin.replace(/\D/g,''))
+    );
+  }
+  
+  if(!ok){$('loginMsg').innerHTML='❌ ID/PIN गलत है।';return}
+  
+  let stObj=null;
+  if(r==='student'){
+    stObj=D.students.find(s=>
+      (s.id.toLowerCase()===i.toLowerCase()||(s.proof&&s.proof.toLowerCase()===i.toLowerCase())||s.name.toLowerCase()===i.toLowerCase()) &&
+      (s.pin===p || ('student '+s.pin).toLowerCase()===p.toLowerCase() || p.replace(/\D/g,'')===s.pin.replace(/\D/g,''))
+    );
+    i=stObj.id;
+  }
+  
+  current={role:r,id:i};
+  $('login').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  
+  // Set Molana Photo
+  if(D.adminPhoto){$('molanaPic').src=D.adminPhoto;}
+  if(r==='admin'){$('adminPhotoChange').classList.remove('hidden');}
+  
+  $('welcome').textContent='स्वागत है — '+(r==='admin'?'Admin':r==='teacher'?'Teacher':stObj.name||i);
+  $('adminPanel').classList.toggle('hidden',r!=='admin');
+  $('teacherPanel').classList.toggle('hidden',r!=='teacher');
+  $('studentPanel').classList.toggle('hidden',r!=='student');
+  
+  if(r==='student'){
+    showMyData();
+    renderStudentNotices();
+  }
+}
+
+function logout(){location.reload()}
+
+$('molanaInput').onchange=()=>{
+  let f=$('molanaInput').files[0];
+  if(f){
+    let r=new FileReader();
+    r.onload=async e=>{
+      D.adminPhoto=e.target.result;
+      $('molanaPic').src=D.adminPhoto;
+      await save();
+      alert('Molana Saheb ki photo update ho gayi!');
+    };
+    r.readAsDataURL(f);
+  }
+};
+
+function hideBoxes(){
+  ['addBox','studentsBox','attBox','reportBox','shareBox','editBox','noticeBox'].forEach(x=>{
+    if($(x))$(x).classList.add('hidden')
+  });
+}
+
+function showAdd(){hideBoxes();$('addBox').classList.remove('hidden')}
+
+$('photo').onchange=()=>{
+  let f=$('photo').files[0];
+  if(f){
+    let r=new FileReader();
+    r.onload=e=>{$('preview').src=e.target.result;$('preview').classList.remove('hidden')};
+    r.readAsDataURL(f);
+  }
+};
+
+function addStudent(){
+  if(D.students.length>=50)return alert('अधिकतम 50 विद्यार्थी');
+  let name=clean($('sname').value),pin=clean($('spin').value);
+  if(!name||!pin)return alert('नाम और PIN जरूरी है');
+  if(D.students.some(s=>s.pin===pin))return alert('यह PIN पहले से इस्तेमाल है');
+  
+  let used=new Set(D.students.map(s=>parseInt(String(s.id||'').replace(/\D/g,''),10)).filter(Boolean)),n=1;
+  while(used.has(n))n++;
+  let id='MG'+String(n).padStart(3,'0'),f=$('photo').files[0];
+  
+  let finish=async pic=>{
+    D.students.push({
+      id,name,father:clean($('sfather').value),class:clean($('sclass').value),
+      mobile:clean($('smobile').value),pin,proof:clean($('sproof').value),photo:pic||''
+    });
+    await save();
+    alert('Student Save हुआ। ID: '+id+' | PIN: '+pin);
+    location.reload();
+  };
+  
+  if(f){
+    let r=new FileReader();
+    r.onload=e=>finish(e.target.result);
+    r.readAsDataURL(f);
+  }else finish('');
+}
+
+// Student Edit Functionality
+function showStudents(){
+  hideBoxes();
+  $('studentsBox').classList.remove('hidden');
+  $('studentsList').innerHTML=D.students.map(s=>`
+    <div class="card" style="border-left:4px solid #075e3d">
+      <div style="display:flex;gap:12px;align-items:center">
+        <img class="studentPhoto" src="${s.photo||''}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'75\' height=\'75\'><rect width=\'75\' height=\'75\' fill=\'%23eee\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\'>No Pic</text></svg>'">
+        <div style="flex:1">
+          <b style="font-size:16px">${s.name}</b><br>
+          <b>ID:</b> ${s.id} | <b>PIN:</b> ${s.pin}<br>
+          <b>Father:</b> ${s.father}<br>
+          <b>Class:</b> ${s.class}<br>
+          <b>Proof ID:</b> ${s.proof}<br>
+          <b>Mobile:</b> ${s.mobile||'-'}
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="gold" style="padding:8px" onclick="editStudent('${s.id}')">✏️ Edit Student</button>
+        <button class="danger" style="padding:8px" onclick="deleteStudent('${s.id}')">🗑️ Delete Student</button>
+      </div>
+    </div>
+  `).join('')||'कोई विद्यार्थी नहीं';
+}
+
+function editStudent(id){
+  let s=D.students.find(x=>x.id===id);
+  if(!s)return;
+  hideBoxes();
+  $('editBox').classList.remove('hidden');
+  $('editId').value=s.id;
+  $('editIdDisplay').innerText=s.id;
+  $('ename').value=s.name;
+  $('efather').value=s.father;
+  $('eclass').value=s.class;
+  $('emobile').value=s.mobile||'';
+  $('epin').value=s.pin;
+  $('eproof').value=s.proof;
+  $('ephoto').value='';
+}
+
+function cancelEdit(){
+  showStudents();
+}
+
+async function saveEditedStudent(){
+  let id=$('editId').value;
+  let s=D.students.find(x=>x.id===id);
+  if(!s)return;
+  
+  let name=clean($('ename').value),pin=clean($('epin').value);
+  if(!name||!pin)return alert('नाम और PIN जरूरी है');
+  
+  s.name=name;
+  s.father=clean($('efather').value);
+  s.class=clean($('eclass').value);
+  s.mobile=clean($('emobile').value);
+  s.pin=pin;
+  s.proof=clean($('eproof').value);
+  
+  let f=$('ephoto').files[0];
+  if(f){
+    let r=new FileReader();
+    r.onload=async e=>{
+      s.photo=e.target.result;
+      await save();
+      alert('Student Data Update हो गया!');
+      showStudents();
+    };
+    r.readAsDataURL(f);
+  } else {
+    await save();
+    alert('Student Data Update हो गया!');
+    showStudents();
+  }
+}
+
+async function deleteStudent(id){
+  let s=D.students.find(x=>x.id===id); if(!s)return;
+  if(!confirm('क्या आप '+s.name+' को Delete करना चाहते हैं?'))return;
+  D.students=D.students.filter(x=>x.id!==id);
+  Object.keys(D.attendance).forEach(d=>{if(D.attendance[d])delete D.attendance[d][id]});
+  await save();
+  showStudents();
+  alert('Student Delete हो गया।');
+}
+
+// Attendance with Sabak System
+function showAttendance(){
+  hideBoxes();
+  $('attBox').classList.remove('hidden');
+  $('attDate').value=new Date().toISOString().slice(0,10);
+  renderAtt();
+}
+
+$('attDate').onchange=renderAtt;
+
+function renderAtt(){
+  let d=$('attDate').value;
+  let curData=D.attendance[d]||{};
+  $('attTable').innerHTML=`
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>हाज़िरी स्थिति</th>
+          <th>सबक सुनाया?</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${D.students.map(s=>{
+          let record = curData[s.id];
+          let status = typeof record === 'object' ? record.status : (record || 'हाज़िर');
+          let sabak = typeof record === 'object' ? record.sabak : 'हाँ (Yes)';
+          return `
+            <tr>
+              <td><b>${s.id}</b> - ${s.name}</td>
+              <td>
+                <select data-id="${s.id}" class="att-status">
+                  <option ${status==='हाज़िर'?'selected':''}>हाज़िर</option>
+                  <option ${status==='ग़ैर-हाज़िर'?'selected':''}>ग़ैर-हाज़िर</option>
+                  <option ${status==='बीमार'?'selected':''}>बीमार</option>
+                  <option ${status==='छुट्टी'?'selected':''}>छुट्टी</option>
+                </select>
+              </td>
+              <td>
+                <select data-id="${s.id}" class="att-sabak">
+                  <option value="हाँ (Yes)" ${sabak==='हाँ (Yes)'?'selected':''}>हाँ (Yes)</option>
+                  <option value="नहीं (No)" ${sabak==='नहीं (No)'?'selected':''}>नहीं (No)</option>
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+async function saveAttendance(){
+  let d=$('attDate').value;
+  D.attendance[d]={};
+  let stInputs = document.querySelectorAll('.att-status');
+  let sabakInputs = document.querySelectorAll('.att-sabak');
+  
+  stInputs.forEach((sel,idx)=>{
+    let sid = sel.dataset.id;
+    let st = sel.value;
+    let sb = sabakInputs[idx].value;
+    D.attendance[d][sid]={status:st, sabak:sb};
+  });
+  
+  await save();
+  alert('Attendance & Sabak Save हो गई!');
+}
+
+// Attendance Calculation & Takawari (%)
+function getStatsDetailed(sid, year, month){
+  let entries = Object.entries(D.attendance).filter(([d])=>d.startsWith(year+'-'+month));
+  let totalDays = entries.length;
+  let present=0, absent=0, sick=0, leave=0, sabakYes=0, sabakNo=0;
+  
+  entries.forEach(([,v])=>{
+    let r = v[sid];
+    if(!r) return;
+    let st = typeof r==='object'? r.status : r;
+    let sb = typeof r==='object'? r.sabak : '';
+    
+    if(st==='हाज़िर') present++;
+    else if(st==='ग़ैर-हाज़िर') absent++;
+    else if(st==='बीमार') sick++;
+    else if(st==='छुट्टी') leave++;
+    
+    if(sb==='हाँ (Yes)') sabakYes++;
+    if(sb==='नहीं (No)') sabakNo++;
+  });
+  
+  let takawari = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : '0';
+  return {present, absent, sick, leave, totalDays, takawari, sabakYes, sabakNo};
+}
+
+function getYearlyDetailed(sid, year){
+  let entries = Object.entries(D.attendance).filter(([d])=>d.startsWith(String(year)));
+  let totalDays = entries.length;
+  let present=0, absent=0, sick=0, leave=0;
+  
+  entries.forEach(([,v])=>{
+    let r = v[sid];
+    if(!r) return;
+    let st = typeof r==='object'? r.status : r;
+    if(st==='हाज़िर') present++;
+    else if(st==='ग़ैर-हाज़िर') absent++;
+    else if(st==='बीमार') sick++;
+    else if(st==='छुट्टी') leave++;
+  });
+  
+  let takawari = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : '0';
+  return {present, absent, sick, leave, totalDays, takawari};
+}
+
+function showReports(){
+  hideBoxes();
+  $('reportBox').classList.remove('hidden');
+  let y=new Date().getFullYear(), m=String(new Date().getMonth()+1).padStart(2,'0');
+  let prevY = y - 1;
+  
+  $('reports').innerHTML=D.students.map(s=>{
+    let ms = getStatsDetailed(s.id, y, m);
+    let ys = getYearlyDetailed(s.id, y);
+    let pys = getYearlyDetailed(s.id, prevY);
+    
+    return `
+      <div class="card" style="border-left:4px solid #c99a2e">
+        <b style="font-size:16px">${s.id} - ${s.name}</b><br>
+        <div style="margin-top:5px">
+          <b>📅 इस महीने की हाज़िरी:</b> 
+          <span class="badge">हाज़िर: ${ms.present}</span>
+          <span class="badge">ग़ैर-हाज़िर: ${ms.absent}</span>
+          <span class="badge">बीमार: ${ms.sick}</span>
+          <span class="badge">छुट्टी: ${ms.leave}</span>
+          <span class="badge badge-gold">📈 माहवारी टकावारी: ${ms.takawari}%</span><br>
+          <span class="badge badge-blue">📖 सबक सुनाया: ${ms.sabakYes} दिन</span>
+          <span class="badge" style="background:#ffebee;color:#c62828">❌ सबक नहीं सुनाया: ${ms.sabakNo} दिन</span>
+        </div>
+        <div style="margin-top:6px">
+          <b>📅 इस साल (${y}) की टकावारी:</b> 
+          <span class="badge">हाज़िर: ${ys.present}/${ys.totalDays} दिन</span>
+          <span class="badge badge-gold">वार्षिक टकावारी: ${ys.takawari}%</span>
+        </div>
+        <div style="margin-top:6px">
+          <b>📅 पिछले साल (${prevY}) की हाज़िरी व टकावारी:</b> 
+          <span class="badge">हाज़िर: ${pys.present}/${pys.totalDays} दिन</span>
+          <span class="badge badge-gold">टकावारी: ${pys.takawari}%</span>
+        </div>
+      </div>
+    `;
+  }).join('')||'कोई डेटा नहीं';
+}
+
+// Notice Board Logic
+function showNotices(){
+  hideBoxes();
+  $('noticeBox').classList.remove('hidden');
+  renderAdminNotices();
+}
+
+async function postNotice(){
+  let text = clean($('noticeMsg').value);
+  if(!text) return alert('सूचना लिखें!');
+  let newNotice = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('hi-IN'),
+    text,
+    replies: []
+  };
+  D.notices.unshift(newNotice);
+  await save();
+  $('noticeMsg').value='';
+  renderAdminNotices();
+  alert('Notice जारी हो गया!');
+}
+
+function renderAdminNotices(){
+  if(!D.notices || D.notices.length===0){
+    $('noticesList').innerHTML='कोई Notice नहीं है।';
+    return;
+  }
+  $('noticesList').innerHTML=D.notices.map(n=>`
+    <div class="notice-box">
+      <b>📅 दिनांक: ${n.date}</b><br>
+      <p style="margin:5px 0;font-size:15px">${n.text}</p>
+      <b>बच्चों के जवाब (${(n.replies||[]).length}):</b>
+      <div>
+        ${(n.replies||[]).map(r=>`
+          <div class="reply-tag"><b>${r.studentName} (${r.studentId}):</b> ${r.msg}</div>
+        `).join('')||'<span style="font-size:12px;color:#777">अभी कोई जवाब नहीं आया।</span>'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderStudentNotices(){
+  if(!D.notices || D.notices.length===0){
+    $('studentNoticeView').innerHTML='कोई नया नोटिस नहीं है।';
+    return;
+  }
+  let sid=current.id;
+  let st=D.students.find(s=>s.id===sid);
+  $('studentNoticeView').innerHTML=D.notices.map(n=>{
+    let myReply = (n.replies||[]).find(r=>r.studentId===sid);
+    return `
+      <div class="notice-box">
+        <b>दिनांक: ${n.date}</b><br>
+        <p style="margin:6px 0;font-weight:bold;color:#075e3d">${n.text}</p>
+        ${myReply? `
+          <div class="reply-tag" style="background:#e8f5e9">
+            <b>आपका जवाब:</b> ${myReply.msg}
+          </div>
+        ` : `
+          <div style="margin-top:8px">
+            <input id="rep_${n.id}" placeholder="इस नोटिस का जवाब लिखें...">
+            <button style="padding:6px;font-size:13px;width:auto" onclick="submitReply(${n.id})">जवाब भेजें</button>
+          </div>
+        `}
+      </div>
+    `;
+  }).join('');
+}
+
+async function submitReply(nid){
+  let val = clean($('rep_'+nid).value);
+  if(!val) return alert('कृपया जवाब लिखें');
+  let n = D.notices.find(x=>x.id===nid);
+  if(!n) return;
+  if(!n.replies) n.replies=[];
+  let st = D.students.find(s=>s.id===current.id);
+  n.replies.push({
+    studentId: current.id,
+    studentName: st ? st.name : current.id,
+    msg: val
+  });
+  await save();
+  alert('आपका जवाब मदरसा में भेज दिया गया है!');
+  renderStudentNotices();
+}
+
+// Student My Data View
+function showMyData(){
+  let s=D.students.find(x=>x.id.toLowerCase()===current.id.toLowerCase());
+  if(!s)return;
+  let y=new Date().getFullYear(),m=String(new Date().getMonth()+1).padStart(2,'0');
+  let prevY = y - 1;
+  
+  let ms = getStatsDetailed(s.id, y, m);
+  let ys = getYearlyDetailed(s.id, y);
+  let pys = getYearlyDetailed(s.id, prevY);
+  
+  $('myData').innerHTML=`
+    <div style="text-align:center">
+      <img class="studentPhoto" style="width:90px;height:90px" src="${s.photo||''}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'90\' height=\'90\'><rect width=\'90\' height=\'90\' fill=\'%23eee\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'12\'>Student</text></svg>'">
+      <h3 style="margin:8px 0">${s.name}</h3>
+    </div>
+    <b>ID:</b> ${s.id}<br>
+    <b>Father:</b> ${s.father}<br>
+    <b>Class:</b> ${s.class}<br>
+    <b>Proof ID:</b> ${s.proof}<br>
+    <hr style="border:0;border-top:1px solid #ddd;margin:10px 0">
+    
+    <b>📅 इस महीने की हाज़िरी व सबक</b>
+    <div style="margin:5px 0">
+      <span class="badge">हाज़िर: ${ms.present}</span>
+      <span class="badge">ग़ैर-हाज़िर: ${ms.absent}</span>
+      <span class="badge">बीमार: ${ms.sick}</span>
+      <span class="badge">छुट्टी: ${ms.leave}</span><br>
+      <span class="badge badge-gold">📈 माहवारी हाज़िरी टकावारी: ${ms.takawari}%</span><br>
+      <span class="badge badge-blue">📖 सबक सुनाया: ${ms.sabakYes} दिन</span>
+      <span class="badge" style="background:#ffebee;color:#c62828">❌ सबक नहीं सुनाया: ${ms.sabakNo} दिन</span>
+    </div>
+    
+    <b style="margin-top:10px;display:block">📅 इस साल (${y}) की टकावारी</b>
+    <div style="margin:5px 0">
+      <span class="badge">हाज़िर: ${ys.present}/${ys.totalDays} दिन</span>
+      <span class="badge badge-gold">सालाना टकावारी: ${ys.takawari}%</span>
+    </div>
+
+    <b style="margin-top:10px;display:block">📅 पिछले साल (${prevY}) की हाज़िरी</b>
+    <div style="margin:5px 0">
+      <span class="badge">हाज़िर: ${pys.present}/${pys.totalDays} दिन</span>
+      <span class="badge badge-gold">टकावारी: ${pys.takawari}%</span>
+    </div>
+  `;
+}
+
+// Teacher Panel functions
+function teacherAttendance(){
+  $('teacherViewArea').innerHTML=`
+    <h3>आज की Attendance & Sabak</h3>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>Student</th><th>स्थिति</th><th>सबक?</th></tr></thead>
+        <tbody>
+          ${D.students.map(s=>`
+            <tr>
+              <td>${s.name}</td>
+              <td>
+                <select id="t_st_${s.id}">
+                  <option>हाज़िर</option>
+                  <option>ग़ैर-हाज़िर</option>
+                  <option>बीमार</option>
+                  <option>छुट्टी</option>
+                </select>
+              </td>
+              <td>
+                <select id="t_sb_${s.id}">
+                  <option value="हाँ (Yes)">हाँ (Yes)</option>
+                  <option value="नहीं (No)">नहीं (No)</option>
+                </select>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    <button onclick="saveTeacherAtt()">Attendance Save</button>
+  `;
+}
+
+async function saveTeacherAtt(){
+  let d=new Date().toISOString().slice(0,10);
+  if(!D.attendance[d]) D.attendance[d]={};
+  D.students.forEach(s=>{
+    let st = $('t_st_'+s.id).value;
+    let sb = $('t_sb_'+s.id).value;
+    D.attendance[d][s.id]={status:st, sabak:sb};
+  });
+  await save();
+  alert('Teacher dwara Attendance & Sabak Save ho gayi!');
+}
+
+function teacherNotices(){
+  $('teacherViewArea').innerHTML=`
+    <h3>📢 Notice Board</h3>
+    <textarea id="tNoticeMsg" placeholder="Teacher notice yahan likhein..." rows="3"></textarea>
+    <button onclick="teacherPostNotice()">Notice Bhejein</button>
+    <div id="tNoticeList" style="margin-top:10px"></div>
+  `;
+  renderTeacherNotices();
+}
+
+async function teacherPostNotice(){
+  let text = clean($('tNoticeMsg').value);
+  if(!text) return alert('Notice likhein');
+  D.notices.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleDateString('hi-IN'),
+    text: '[Teacher Notice] ' + text,
+    replies: []
+  });
+  await save();
+  $('tNoticeMsg').value='';
+  renderTeacherNotices();
+  alert('Notice bhej diya gaya!');
+}
+
+function renderTeacherNotices(){
+  $('tNoticeList').innerHTML=D.notices.map(n=>`
+    <div class="notice-box">
+      <b>${n.date}</b>: ${n.text}
+      <div style="font-size:12px;margin-top:5px">Replies: ${(n.replies||[]).length}</div>
+    </div>
+  `).join('');
+}
+
+// WhatsApp Share
+function showShare(){
+  hideBoxes();
+  $('shareBox').classList.remove('hidden');
+  $('shareStudents').innerHTML=D.students.map(s=>`
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+      <span>${s.id} - ${s.name} (PIN: ${s.pin})</span>
+      <button style="width:auto;padding:6px 12px" onclick="shareStudent('${s.id}')">WhatsApp पर Login भेजें</button>
+    </div>
+  `).join('');
+}
+
+function getUrl(){return clean($('siteUrl').value)||location.href}
+function shareGeneral(){
+  let u=getUrl();
+  if(u.startsWith('file:'))return alert('पहले HTML को HTTPS website पर upload करें।');
+  location.href='https://wa.me/?text='+encodeURIComponent('Madarsa Gulshan-e-Madina Online Login: '+u);
+}
+function shareStudent(id){
+  let u=getUrl();
+  if(u.startsWith('file:'))return alert('पहले HTTPS link डालें।');
+  let s=D.students.find(x=>x.id===id);
+  location.href='https://wa.me/?text='+encodeURIComponent('Madarsa Gulshan-e-Madina\nStudent ID: '+s.id+'\nPIN: '+s.pin+'\nLogin Link: '+u);
+}
+
+// Backup & Restore
+async function backup(){
+  await save();
+  let a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(D)],{type:'application/json'}));
+  a.download='madarsa-backup.json';
+  a.click();
+}
+
+function restore(e){
+  let f=e.target.files[0];
+  if(!f)return;
+  let r=new FileReader();
+  r.onload=async x=>{
+    try{
+      let z=JSON.parse(x.target.result);
+      if(!z||!Array.isArray(z.students))throw Error('bad');
+      D=z;
+      await save();
+      alert('Restore हो गया! Data wapas aa gaya.');
+      location.reload();
+    }catch{alert('Backup file sahi nahi hai.')}
+  };
+  r.readAsText(f);
+}
+</script>
+</body>
+</html>
